@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - AI Hostel Complaint System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>⚙️ Warden Admin Panel</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="{{ url_for('admin_dashboard') }}" class="sidebar-link active">📊 System Overview</a></li>
+        <li style="margin-top: 2rem;"><a href="{{ url_for('logout') }}" class="sidebar-link" style="color: #ef4444;">🚪 Sign Out</a></li>
+      </ul>
+      <div class="sidebar-user">
+        <span class="sidebar-username">{{ session['name'] }}</span>
+        <span class="sidebar-userrole">Hostel Warden</span>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <header class="header-bar">
+        <div class="header-title">
+          <h2>Hostel Administration Panel</h2>
+          <p>AI-Prioritized Complaint Queue & Maintenance Dispatch.</p>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); background-color: white; border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.5rem 1rem;">
+          📅 Current system date: <strong>2026-06-25</strong>
+        </div>
+      </header>
+
+      <!-- Flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- Admin Dashboard Analytics Widgets -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-title">Total Lodged</span>
+          <span class="stat-value">{{ analytics.total }}</span>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #3b82f6;">
+          <span class="stat-title">Pending / In Progress</span>
+          <span class="stat-value">{{ analytics.pending + analytics.in_progress }}</span>
+        </div>
+        <div class="stat-card green-border">
+          <span class="stat-title">Resolved</span>
+          <span class="stat-value">{{ analytics.resolved }}</span>
+        </div>
+        <div class="stat-card red-border">
+          <span class="stat-title">🔴 Red Priority</span>
+          <span class="stat-value">{{ analytics.red }}</span>
+        </div>
+        <div class="stat-card orange-border">
+          <span class="stat-title">🟠 Orange Priority</span>
+          <span class="stat-value">{{ analytics.orange }}</span>
+        </div>
+        <div class="stat-card green-border">
+          <span class="stat-title">🟢 Green Priority</span>
+          <span class="stat-value">{{ analytics.green }}</span>
+        </div>
+      </section>
+
+      <!-- Advanced Query Controls (Search & Filters) -->
+      <section class="dashboard-actions" style="background-color: white; padding: 1.25rem; border: 1px solid var(--border-color); border-radius: 0.75rem; box-shadow: var(--shadow-sm);">
+        <form action="{{ url_for('admin_dashboard') }}" method="GET" class="filter-form" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          
+          <div style="display: flex; gap: 0.75rem; flex-grow: 1;">
+            <input 
+              type="text" 
+              name="search" 
+              value="{{ search }}" 
+              placeholder="Search ID, text, student name..." 
+              class="search-input"
+              style="flex-grow: 1;"
+            >
+            
+            <select name="priority" class="filter-select">
+              <option value="">-- All Priorities --</option>
+              <option value="Red" {% if p_filter == 'Red' %}selected{% endif %}>🔴 High (Red)</option>
+              <option value="Orange" {% if p_filter == 'Orange' %}selected{% endif %}>🟠 Medium (Orange)</option>
+              <option value="Green" {% if p_filter == 'Green' %}selected{% endif %}>🟢 Low (Green)</option>
+            </select>
+            
+            <select name="status" class="filter-select">
+              <option value="">-- All Statuses --</option>
+              <option value="Pending" {% if s_filter == 'Pending' %}selected{% endif %}>Pending</option>
+              <option value="In Progress" {% if s_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
+              <option value="Resolved" {% if s_filter == 'Resolved' %}selected{% endif %}>Resolved</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+            <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.25rem; width: auto; font-size: 0.875rem;">Apply Filters</button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; width: auto; font-size: 0.875rem;">Reset</a>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- AI-Sorted Priority Dispatch Queue -->
+      <section style="margin-top: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 600;">⚡ AI Priority Dispatch Queue (Red &rarr; Orange &rarr; Green)</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">
+            *Sorted dynamically based on Priority ML Score
+          </span>
+        </div>
+
+        {% if complaints %}
+          <div class="complaints-list">
+            {% for complaint in complaints %}
+              <article class="complaint-card priority-{{ complaint.priority }}">
+                <div class="complaint-meta">
+                  <div class="complaint-id-section">
+                    <span class="complaint-id">#{{ complaint.complaint_id }}</span>
+                    <span class="complaint-category">{{ complaint.category }}</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">
+                      by <strong>{{ complaint.student_name }}</strong> (Room {{ complaint.room_no }})
+                    </span>
+                  </div>
+                  
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span class="badge badge-priority-{{ complaint.priority }}">{{ complaint.priority }}</span>
+                    <span class="badge badge-status-{{ complaint.status.replace(' ', '_') }}">{{ complaint.status }}</span>
+                    
+                    <!-- Quick status update control panel -->
+                    <form action="{{ url_for('update_status', complaint_id=complaint.complaint_id) }}" method="POST" class="status-update-form" style="margin-left: 10px;">
+                      <select name="status" class="status-select" onchange="this.form.submit()">
+                        <option value="">Update Status</option>
+                        <option value="Pending" {% if complaint.status == 'Pending' %}selected{% endif %}>Pending</option>
+                        <option value="In Progress" {% if complaint.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Resolved" {% if complaint.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                      </select>
+                    </form>
+                  </div>
+                </div>
+                
+                <p class="complaint-body" style="background-color: #fafaf9; padding: 10px; border-radius: 6px; border-left: 3px solid #d6d3d1;">
+                  {{ complaint.complaint_text }}
+                </p>
+                
+                <div class="complaint-footer">
+                  <div>Logged At: <strong>{{ complaint.created_at }}</strong></div>
+                  <div>Last updated: <strong>{{ complaint.updated_at }}</strong></div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else: %}
+          <div class="no-complaints">
+            <h3>No complaints found matching criteria.</h3>
+            <p>Try resetting the search bar or filters.</p>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary" style="width: auto; margin-top: 1rem;">Reset Filters</a>
+          </div>
+        {% endif %}
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+complaint_text,category,priority
+No electricity in my entire wing block A,Electricity,Red
+Power failure in room 302 fan and lights are off,Electricity,Orange
+Socket plug is broken and sparks when plugged in,Electricity,Red
+The tube light is flickering constantly in my room,Electricity,Green
+My study lamp socket is not working,Electricity,Green
+Geyser in the bathroom is shocking when touched,Electricity,Red
+The water geyser in C block is not heating water,Electricity,Orange
+Ceiling fan speed is too low and making loud clicking sound,Electricity,Green
+Complete water supply stopped in B wing bathroom,Water,Red
+Water leakage from the basin tap in room 115,Water,Orange
+No water in toilets of block D since morning,Water,Red
+Drinking water filter on second floor is empty and dry,Water,Orange
+Bathroom flush valve is leaking water continuously,Water,Green
+Sewage pipe block causing water overflow in bathroom,Water,Red
+Very low water pressure in washroom taps,Water,Green
+WiFi is not connecting in block B room 210,WiFi,Orange
+Internet speed is extremely slow cannot open websites,WiFi,Orange
+WiFi router is completely dead and power led is off,WiFi,Orange
+WiFi password changed and cannot login,WiFi,Green
+Frequent disconnection in hostel network,WiFi,Orange
+Corridor has trash lying around and smells bad,Cleanliness,Green
+Toilet is extremely dirty and has not been cleaned,Cleanliness,Orange
+Garbage bin on 3rd floor is overflowing,Cleanliness,Green
+Bed bugs in room 405 mattress,Cleanliness,Orange
+Cockroaches found inside the water dispenser area,Cleanliness,Red
+Mess food has hair and insect in it,Mess,Red
+Quality of dinner served today was very bad,Mess,Orange
+The drinking cups in mess are oily and dirty,Mess,Green
+Mess drinking water has weird chemical taste,Mess,Red
+Mess menu was not followed,Mess,Green
+The door lock is completely broken cannot lock room,Security,Red
+Unknown outsider entering hostel without registry,Security,Red
+Fire hazard due to open wiring near staircase,Security,Red
+The smoke detector is ringing constantly in corridor,Security,Red
+CCTV camera on main gate is damaged and dark,Security,Red
+Security guard was sleeping at the night shift,Security,Red
+The study chair has a broken leg cannot sit on it,Furniture,Green
+Study table wood is peeling off and damaged,Furniture,Green
+Bed frame is squeaking and loose,Furniture,Green
+Cupboard door hinges are broken and falling off,Furniture,Green
+Curtain rod in room 201 is missing,Furniture,Green
+Lost keys of my drawer,Others,Green
+AC in reading room is not cooling at all,Others,Orange
+Stray dogs entered hostel lobby,Others,Orange
+Elevator gets stuck and screen shows error,Others,Red
+Window glass pane is shattered and needs replacement,Furniture,Green
+No hot water in bathrooms for the past three days,Water,Orange
+Main power line tripped and sparks seen in transformer,Electricity,Red
+Intruder tried to open my window from balcony,Security,Red
+Unsanitary washrooms smell is unbearable,Cleanliness,Orange
+Internet signal strength is too weak in corner rooms,WiFi,Orange
+Foul smell from the mess kitchen area,Mess,Orange
+Mosquito breeding in stagnant water near main gate,Cleanliness,Orange
+Cabinet handle is loose and about to fall,Furniture,Green
+Water is muddy and yellow from the tap,Water,Orange

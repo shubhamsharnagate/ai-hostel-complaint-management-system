@@ -1,0 +1,6 @@
+{
+  "name": "Hostel Complaint Management System",
+  "description": "A comprehensive Hostel Complaint Management System featuring AI-based priority detection, category classification, and structured dashboard analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

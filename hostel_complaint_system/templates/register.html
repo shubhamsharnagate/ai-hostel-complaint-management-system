@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Student - AI Hostel Complaint System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-main">
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Student Registration</h1>
+        <p>Hostel Complaints AI Portal</p>
+      </div>
+
+      <!-- Flash Message Handler -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('register') }}" method="POST">
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name</label>
+          <input class="form-control" type="text" id="name" name="name" required placeholder="e.g. Rahul Sharma">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Institutional Email</label>
+          <input class="form-control" type="email" id="email" name="email" required placeholder="e.g. rahul@student.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="room_no">Hostel Block & Room No</label>
+          <input class="form-control" type="text" id="room_no" name="room_no" required placeholder="e.g. A-304">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Choose Secure Password</label>
+          <input class="form-control" type="password" id="password" name="password" required placeholder="••••••••">
+        </div>
+
+        <div class="form-group" style="display: none;">
+          <!-- Hidden default role input for security, can be toggled if needed -->
+          <input type="hidden" name="role" value="student">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already registered? <a href="{{ url_for('login') }}">Return to Log In</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

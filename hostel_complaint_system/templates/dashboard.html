@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - AI Hostel Complaint System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar-nav">
+      <div class="sidebar-logo">
+        <span>🏢 Hostel AI System</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="{{ url_for('student_dashboard') }}" class="sidebar-link active">🏠 Home Dashboard</a></li>
+        <li><a href="{{ url_for('submit_complaint') }}" class="sidebar-link">📝 Submit Complaint</a></li>
+        <li><a href="{{ url_for('complaint_history') }}" class="sidebar-link">📜 History & Tracking</a></li>
+        <li style="margin-top: 2rem;"><a href="{{ url_for('logout') }}" class="sidebar-link" style="color: #ef4444;">🚪 Sign Out</a></li>
+      </ul>
+      <div class="sidebar-user">
+        <span class="sidebar-username">{{ session['name'] }}</span>
+        <span class="sidebar-userrole">Student (Room {{ session['room_no'] }})</span>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <header class="header-bar">
+        <div class="header-title">
+          <h2>Student Dashboard</h2>
+          <p>Quick overview of your active maintenance and service complaints.</p>
+        </div>
+        <div>
+          <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary" style="width: auto;">+ New Complaint</a>
+        </div>
+      </header>
+
+      <!-- Flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- Statistics Summary Widgets -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-title">Total Lodged</span>
+          <span class="stat-value">{{ total }}</span>
+        </div>
+        <div class="stat-card orange-border">
+          <span class="stat-title">Awaiting Action</span>
+          <span class="stat-value">{{ pending }}</span>
+        </div>
+        <div class="stat-card green-border">
+          <span class="stat-title">Resolved</span>
+          <span class="stat-value">{{ resolved }}</span>
+        </div>
+      </section>
+
+      <!-- Recent complaints -->
+      <section style="margin-top: 2.5rem;">
+        <h3 style="margin-bottom: 1rem; font-size: 1.15rem; font-weight: 600;">Recent Complaint Actions</h3>
+        
+        {% if complaints %}
+          <div class="complaints-list">
+            {% for complaint in complaints %}
+              <article class="complaint-card priority-{{ complaint.priority }}">
+                <div class="complaint-meta">
+                  <div class="complaint-id-section">
+                    <span class="complaint-id">#{{ complaint.complaint_id }}</span>
+                    <span class="complaint-category">{{ complaint.category }}</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <span class="badge badge-priority-{{ complaint.priority }}">{{ complaint.priority }} Priority</span>
+                    <span class="badge badge-status-{{ complaint.status.replace(' ', '_') }}">{{ complaint.status }}</span>
+                  </div>
+                </div>
+                
+                <p class="complaint-body">{{ complaint.complaint_text }}</p>
+                
+                <div class="complaint-footer">
+                  <div>Logged: <strong>{{ complaint.created_at }}</strong></div>
+                  <div>Last update: <strong>{{ complaint.updated_at }}</strong></div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+          <p style="margin-top: 1.5rem; text-align: center;">
+            <a href="{{ url_for('complaint_history') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">View Complete History &rarr;</a>
+          </p>
+        {% else: %}
+          <div class="no-complaints">
+            <h3>No complaints filed yet!</h3>
+            <p>If you have any issues with water, electricity, wifi, or furniture, click the button below.</p>
+            <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary" style="width: auto; margin-top: 1.5rem;">Submit Your First Complaint</a>
+          </div>
+        {% endif %}
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

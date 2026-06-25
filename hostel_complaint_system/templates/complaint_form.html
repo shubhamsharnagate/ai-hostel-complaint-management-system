@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Complaint - AI Hostel Complaint System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>🏢 Hostel AI System</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="{{ url_for('student_dashboard') }}" class="sidebar-link">🏠 Home Dashboard</a></li>
+        <li><a href="{{ url_for('submit_complaint') }}" class="sidebar-link active">📝 Submit Complaint</a></li>
+        <li><a href="{{ url_for('complaint_history') }}" class="sidebar-link">📜 History & Tracking</a></li>
+        <li style="margin-top: 2rem;"><a href="{{ url_for('logout') }}" class="sidebar-link" style="color: #ef4444;">🚪 Sign Out</a></li>
+      </ul>
+      <div class="sidebar-user">
+        <span class="sidebar-username">{{ session['name'] }}</span>
+        <span class="sidebar-userrole">Student (Room {{ session['room_no'] }})</span>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <header class="header-bar">
+        <div class="header-title">
+          <h2>File a New Complaint</h2>
+          <p>Explain your issue in simple English. Our built-in AI will automatically categorize and prioritize it.</p>
+        </div>
+        <div>
+          <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary" style="width: auto;">&larr; Back to Home</a>
+        </div>
+      </header>
+
+      <!-- Form Card -->
+      <div style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 0.75rem; padding: 2rem; box-shadow: var(--shadow-sm); max-width: 700px; margin: 0 auto;">
+        
+        <form action="{{ url_for('submit_complaint') }}" method="POST">
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 600;" for="complaint_text">Describe your issue in detail</label>
+            <textarea 
+              class="form-control" 
+              id="complaint_text" 
+              name="complaint_text" 
+              required 
+              placeholder="e.g., There is a continuous water leakage under the washroom basin in Room 304, causing a puddle to form on the floor."
+            ></textarea>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
+              💡 <strong>NLP Tip:</strong> Try describing specific issues, such as <em>"WiFi completely disconnected"</em> or <em>"No water in the flush"</em> or <em>"Broken chair in study hall"</em>. The AI parses keywords dynamically!
+            </p>
+          </div>
+
+          <!-- Live AI Indicator Box -->
+          <div id="live-ai-indicator" style="display: none; margin-bottom: 1.5rem;"></div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary">⚡ Analyze & Submit Complaint</button>
+            <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+        
+      </div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
